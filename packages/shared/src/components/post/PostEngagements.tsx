@@ -11,7 +11,10 @@ import { PostActions, ShareBookmarkProps } from './PostActions';
 import { PostComments } from './PostComments';
 import { PostUpvotesCommentsCount } from './PostUpvotesCommentsCount';
 import { Comment } from '../../graphql/comments';
-import { Origin } from '../../lib/analytics';
+import { AnalyticsEvent, Origin } from '../../lib/analytics';
+import { useAnalyticsContext } from '../../contexts/AnalyticsContext';
+import { postAnalyticsEvent } from '../../lib/feed';
+import { PostAnalyticsProps } from './common';
 
 const AuthorOnboarding = dynamic(
   () => import(/* webpackChunkName: "authorOnboarding" */ './AuthorOnboarding'),
@@ -29,7 +32,7 @@ const ShareModal = dynamic(
   () => import(/* webpackChunkName: "shareModal" */ '../modals/ShareModal'),
 );
 
-interface PostEngagementsProps extends ShareBookmarkProps {
+interface PostEngagementsProps extends ShareBookmarkProps, PostAnalyticsProps {
   post: Post;
   analyticsOrigin: PostOrigin;
   shouldOnboardAuthor?: boolean;
@@ -43,6 +46,7 @@ function PostEngagements({
   analyticsOrigin,
   shouldOnboardAuthor,
   enableShowShareNewComment,
+  getFeedAnalytics,
 }: PostEngagementsProps): ReactElement {
   const postQueryKey = ['post', post.id];
   const { user, showLogin } = useAuthContext();
@@ -58,9 +62,17 @@ function PostEngagements({
     closeShareComment,
     onShowShareNewComment,
   } = useShareComment(analyticsOrigin, enableShowShareNewComment);
+  const { trackEvent } = useAnalyticsContext();
 
   const onCommented = (comment: Comment, isNew?: boolean) => {
     if (isNew) {
+      trackEvent(
+        postAnalyticsEvent(
+          AnalyticsEvent.CommentPost,
+          post,
+          getFeedAnalytics ? getFeedAnalytics() : undefined,
+        ),
+      );
       setPermissionNotificationCommentId(comment.id);
       onShowShareNewComment(comment.id);
     }

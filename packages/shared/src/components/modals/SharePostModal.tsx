@@ -10,8 +10,12 @@ import { ONBOARDING_OFFSET } from '../post/BasePostContent';
 import { PassedPostNavigationProps } from '../post/PostContent';
 import { PostType } from '../../graphql/posts';
 import EnableNotification from '../notifications/EnableNotification';
+import { PostAnalyticsProps } from '../post/common';
 
-interface PostModalProps extends ModalProps, PassedPostNavigationProps {
+interface PostModalProps
+  extends ModalProps,
+    PassedPostNavigationProps,
+    PostAnalyticsProps {
   id: string;
 }
 
@@ -23,6 +27,7 @@ export default function PostModal({
   onNextPost,
   postPosition,
   onRemovePost,
+  getFeedAnalytics,
   ...props
 }: PostModalProps): ReactElement {
   const { showArticleOnboarding } = useContext(OnboardingContext);
@@ -57,6 +62,7 @@ export default function PostModal({
         onClose={onRequestClose}
         origin={Origin.ArticleModal}
         onRemovePost={onRemovePost}
+        getFeedAnalytics={getFeedAnalytics}
         className={{
           container: containerClass,
           fixedNavigation: { container: 'w-[inherit]', actions: 'ml-auto' },

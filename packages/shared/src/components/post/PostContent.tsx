@@ -21,6 +21,7 @@ import { BasePostContent, PostContentClassName } from './BasePostContent';
 import classed from '../../lib/classed';
 import { cloudinary } from '../../lib/image';
 import { combinedClicks } from '../../lib/click';
+import { PostAnalyticsProps } from './common';
 
 export type PassedPostNavigationProps = Pick<
   PostNavigationProps,
@@ -29,7 +30,8 @@ export type PassedPostNavigationProps = Pick<
 
 export interface PostContentProps
   extends Pick<PostModalActionsProps, 'onClose' | 'inlineActions'>,
-    PassedPostNavigationProps {
+    PassedPostNavigationProps,
+    PostAnalyticsProps {
   enableShowShareNewComment?: boolean;
   post?: Post;
   isFallback?: boolean;
@@ -65,6 +67,7 @@ export function PostContent({
   customNavigation,
   onRemovePost,
   backToSquad,
+  getFeedAnalytics,
 }: PostContentProps): ReactElement {
   const { subject } = useToastNotification();
   const engagementActions = usePostContent({
@@ -121,6 +124,7 @@ export function PostContent({
               container: classNames('pt-6', className?.navigation?.container),
             },
           }}
+          getFeedAnalytics={getFeedAnalytics}
           isFallback={isFallback}
           customNavigation={customNavigation}
           enableShowShareNewComment={enableShowShareNewComment}

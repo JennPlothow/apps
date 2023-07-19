@@ -12,6 +12,7 @@ import {
   UsePostContentProps,
 } from '../../hooks/usePostContent';
 import OnboardingContext from '../../contexts/OnboardingContext';
+import { PostAnalyticsProps } from './common';
 
 const ShareModal = dynamic(
   () => import(/* webpackChunkName: "shareModal" */ '../modals/ShareModal'),
@@ -29,7 +30,9 @@ export interface PostContentClassName {
   fixedNavigation?: PostNavigationClassName;
 }
 
-export interface BasePostContentProps extends UsePostContentProps {
+export interface BasePostContentProps
+  extends UsePostContentProps,
+    PostAnalyticsProps {
   post: Post;
   children: ReactNode;
   isFallback?: boolean;
@@ -55,6 +58,7 @@ export function BasePostContent({
   shouldOnboardAuthor,
   enableShowShareNewComment,
   customNavigation,
+  getFeedAnalytics,
 }: BasePostContentProps): ReactElement {
   const { id } = post ?? {};
 
@@ -86,6 +90,7 @@ export function BasePostContent({
         onBookmark={onToggleBookmark}
         shouldOnboardAuthor={shouldOnboardAuthor}
         enableShowShareNewComment={enableShowShareNewComment}
+        getFeedAnalytics={getFeedAnalytics}
       />
       {sharePost && (
         <ShareModal

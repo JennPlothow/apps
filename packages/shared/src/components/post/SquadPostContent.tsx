@@ -36,6 +36,7 @@ function SquadPostContent({
   onNextPost,
   onClose,
   onRemovePost,
+  getFeedAnalytics,
 }: PostContentProps): ReactElement {
   const { mutateAsync: onSendViewPost } = useMutation(sendViewPost);
   const hasNavigation = !!onPreviousPost || !!onNextPost;
@@ -98,6 +99,7 @@ function SquadPostContent({
           engagementProps={engagementActions}
           origin={origin}
           post={post}
+          getFeedAnalytics={getFeedAnalytics}
         >
           <PostSourceInfo
             date={postDateFormat(post.createdAt)}

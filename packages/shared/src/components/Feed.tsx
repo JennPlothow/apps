@@ -420,6 +420,12 @@ export default function Feed<T>({
   };
 
   const ArticleModal = PostModalMap[selectedPost?.type];
+  const getPostAnalyticsEvent = () => ({
+    columns: virtualizedNumCards,
+    column: calculateColumn(selectedPostIndex, virtualizedNumCards),
+    row: calculateRow(selectedPostIndex, virtualizedNumCards),
+    ...feedAnalyticsExtra(feedName, ranking),
+  });
 
   return (
     <div
@@ -509,6 +515,7 @@ export default function Feed<T>({
             onNextPost={onNext}
             postPosition={postPosition}
             onRemovePost={() => onRemovePost(selectedPostIndex)}
+            getFeedAnalytics={getPostAnalyticsEvent}
           />
         )}
         {sharePost && (

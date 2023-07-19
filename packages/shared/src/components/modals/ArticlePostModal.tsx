@@ -11,8 +11,12 @@ import usePostById from '../../hooks/usePostById';
 import BasePostModal from './BasePostModal';
 import OnboardingContext from '../../contexts/OnboardingContext';
 import { PostType } from '../../graphql/posts';
+import { PostAnalyticsProps } from '../post/common';
 
-interface ArticlePostModalProps extends ModalProps, PassedPostNavigationProps {
+interface ArticlePostModalProps
+  extends ModalProps,
+    PassedPostNavigationProps,
+    PostAnalyticsProps {
   id: string;
 }
 
@@ -24,6 +28,7 @@ export default function ArticlePostModal({
   onNextPost,
   postPosition,
   onRemovePost,
+  getFeedAnalytics,
   ...props
 }: ArticlePostModalProps): ReactElement {
   const { showArticleOnboarding } = useContext(OnboardingContext);
@@ -56,6 +61,7 @@ export default function ArticlePostModal({
             actions: 'ml-auto',
           },
         }}
+        getFeedAnalytics={getFeedAnalytics}
         onClose={onRequestClose}
         origin={Origin.ArticleModal}
         onRemovePost={onRemovePost}
